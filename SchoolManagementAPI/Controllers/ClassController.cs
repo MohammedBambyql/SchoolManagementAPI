@@ -22,8 +22,8 @@ namespace SchoolManagementAPI.Controllers
             return Ok(classes);
         }
 
-        [HttpGet("get-class-by-id/{id}")]
-        public async Task<ActionResult<Class>> GetClass(int id)
+        [HttpGet("get-class-by-id")]
+        public async Task<ActionResult<Class>> GetClass([FromQuery]int id)
         {
             var classObj = await _context.Classes
                                          .Include(c => c.Teacher)
@@ -39,7 +39,7 @@ namespace SchoolManagementAPI.Controllers
 
 
         [HttpPost("create-class")]
-        public async Task<ActionResult<Class>> PostClass(Class classObj)
+        public async Task<ActionResult<Class>> PostClass([FromBody]Class classObj)
         {
             var teacher = await _context.Teachers.FindAsync(classObj.TeacherId);
 
@@ -59,7 +59,7 @@ namespace SchoolManagementAPI.Controllers
 
 
         [HttpPut("update-class/{id}")]
-        public async Task<IActionResult> PutClass(int id, Class classObj)
+        public async Task<IActionResult> PutClass([FromRoute]int id, [FromBody]Class classObj)
         {
             if (id != classObj.ClassId)
             {
@@ -107,7 +107,7 @@ namespace SchoolManagementAPI.Controllers
 
 
         [HttpDelete("delete-class/{id}")]
-        public async Task<IActionResult> DeleteClass(int id)
+        public async Task<IActionResult> DeleteClass([FromRoute]int id)
         {
             var classObj = await _context.Classes
                 .Include(c => c.Teacher) 
