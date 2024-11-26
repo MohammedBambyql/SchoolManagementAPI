@@ -54,7 +54,7 @@ namespace SchoolManagementAPI.Controllers
             _context.Entry(student).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
-            return Ok(student);
+            return NoContent();
         }
 
         [HttpDelete("delete-student/{id}")]
@@ -69,7 +69,7 @@ namespace SchoolManagementAPI.Controllers
             _context.Students.Remove(student);
             await _context.SaveChangesAsync();
 
-            return Ok(student);
+            return NoContent();
         }
     }
 }

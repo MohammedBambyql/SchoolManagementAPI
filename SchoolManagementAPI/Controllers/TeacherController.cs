@@ -50,26 +50,9 @@ namespace SchoolManagementAPI.Controllers
             {
                 return BadRequest();
             }
-
             _context.Entry(teacher).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.Teachers.Any(e => e.TeacherId == id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return Ok(teacher);
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
 
         [HttpDelete("delete-teacher/{id}")]
@@ -84,7 +67,7 @@ namespace SchoolManagementAPI.Controllers
             _context.Teachers.Remove(teacher);
             await _context.SaveChangesAsync();
 
-            return Ok(teacher);
+            return NoContent();
         }
     }
 }

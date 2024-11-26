@@ -62,46 +62,14 @@ namespace SchoolManagementAPI.Controllers
         public async Task<IActionResult> PutClass([FromRoute]int id, [FromBody]Class classObj)
         {
             if (id != classObj.ClassId)
-            {
-                return BadRequest();
-            }
+        {
+            return BadRequest();
+        }
 
-            var classInDb = await _context.Classes
-                .Include(c => c.Teacher) 
-                .FirstOrDefaultAsync(c => c.ClassId == id);
+        _context.Entry(classObj).State = EntityState.Modified;
+        await _context.SaveChangesAsync();
 
-            if (classInDb == null)
-            {
-                return NotFound();
-            }
-
-            classInDb.ClassName = classObj.ClassName;
-            classInDb.TeacherId = classObj.TeacherId;
-
-            if (classObj.Teacher != null)
-            {
-                classInDb.Teacher = classObj.Teacher;
-            }
-
-            _context.Entry(classInDb).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.Classes.Any(e => e.ClassId == id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return Ok(classObj);
+        return NoContent();
         }
 
 
@@ -109,19 +77,16 @@ namespace SchoolManagementAPI.Controllers
         [HttpDelete("delete-class/{id}")]
         public async Task<IActionResult> DeleteClass([FromRoute]int id)
         {
-            var classObj = await _context.Classes
-                .Include(c => c.Teacher) 
-                .FirstOrDefaultAsync(c => c.ClassId == id);
-
-            if (classObj == null)
+            var classItem = await _context.Classes.FindAsync(id);
+            if (classItem == null)
             {
                 return NotFound();
             }
 
-            _context.Classes.Remove(classObj);
+            _context.Classes.Remove(classItem);
             await _context.SaveChangesAsync();
 
-            return Ok(classObj); 
+            return NoContent();
         }
 
     }
