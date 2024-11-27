@@ -48,8 +48,6 @@ namespace SchoolManagementAPI.Controllers
                 return NotFound("Teacher not found");
             }
 
-            classObj.Teacher = teacher;
-
             _context.Classes.Add(classObj);
             await _context.SaveChangesAsync();
 
